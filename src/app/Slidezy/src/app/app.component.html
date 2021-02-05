@@ -3,8 +3,15 @@
     <mat-icon>menu</mat-icon>
   </button>
   <h1>slidezy</h1>
+
+  <h1 *ngIf="activeSession$ | async as activeSession" class="title-link">.app/{{activeSession}}</h1>
+
 </mat-toolbar>
-<mat-drawer-container #matDrawer class="example-container">
-  <mat-drawer mode="side" opened></mat-drawer>
-  <mat-drawer-content></mat-drawer-content>
+<mat-drawer-container autosize #matDrawer class="example-container">
+  <mat-drawer mode="side" opened>
+    <app-slide-list></app-slide-list>
+  </mat-drawer>
+  <mat-drawer-content>
+    <router-outlet></router-outlet>
+  </mat-drawer-content>
 </mat-drawer-container>

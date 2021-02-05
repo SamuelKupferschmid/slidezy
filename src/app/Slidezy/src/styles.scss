@@ -1,8 +1,30 @@
 html,
 body {
     height: 100%;
-}
-body {
     margin: 0;
     font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+app-sidenav {
+    display: flex;
+}
+
+mat-drawer-container {
+    flex: 1 1 auto;
+}
+
+mat-drawer-content > *:nth-child(2) {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
 }
