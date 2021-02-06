@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { filter, first, map, mergeMap, take } from 'rxjs/operators';
+import { filter, map, mergeMap } from 'rxjs/operators';
 import { SessionService } from '../session.service';
 
 @Injectable({
@@ -19,7 +18,7 @@ export class SlidesService {
   ) {
     router.events.pipe(
       filter(event => event instanceof NavigationEnd),
-      map(event => {
+      map(() => {
         let route = this.router.routerState.root;
         while (route.firstChild) {
           route = route.firstChild;
@@ -30,28 +29,23 @@ export class SlidesService {
       mergeMap(route => route.paramMap),
       map(params => params.get('slide'))
     ).subscribe(slide => {
-      this.activeSlide = this.slides[parseInt(slide) - 1];
+      this.activeSlide = this.slides[parseInt(slide, 10) - 1];
     });
   }
 
-  addSlide() {
+  addSlide(): void {
     const index = this.slides.length;
-    this.slides.push({ index })
+    this.slides.push({ index });
     this.navigateToSlide(index);
   }
 
-  navigateToSlide(number: number) {
-    this.router.navigate([this.session.activeSession, (number + 1).toString()])
-
+  navigateToSlide(page: number): void {
+    this.router.navigate([this.session.activeSession, (page + 1).toString()]);
   }
 }
 
 export interface Slide {
   index: number;
-}
-
-export interface Path {
-
 }
 
 export interface Coordinate {

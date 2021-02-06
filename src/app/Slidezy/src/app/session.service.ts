@@ -1,18 +1,19 @@
 import { Injectable } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { filter, map, mergeMap, shareReplay } from 'rxjs/operators';
+import { filter, map, mergeMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionService {
-  private _activeSession: string;
+
+  activeSession: string;
 
   constructor(private router: Router) {
     router.events.pipe(
       filter(event => event instanceof NavigationEnd),
-      map(event => {
+      map(() => {
         let route = this.router.routerState.root;
         while (route.firstChild) {
           route = route.firstChild;
@@ -23,9 +24,9 @@ export class SessionService {
       mergeMap(route => route.paramMap),
       map(params => params.get('sessionId')),
     ).subscribe(session => {
-      this._activeSession = session;
+      this.activeSession = session;
 
-      let title = 'Slidezy'
+      let title = 'Slidezy';
 
       if (session) {
         title += ` | ${session}`;
@@ -35,15 +36,14 @@ export class SessionService {
     });
   }
 
-  get activeSession() {
-    return this._activeSession;
-  }
-
   createSession(): Observable<string> {
     const chars = '0123456789abcdefghijklmnopqrstuvwxyz';
     const length = 8;
-    var result = '';
-    for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+    let result = '';
+    for (let i = length; i > 0; --i) {
+      result += chars[Math.floor(Math.random() * chars.length)];
+    }
+
     return of(result);
   }
 }

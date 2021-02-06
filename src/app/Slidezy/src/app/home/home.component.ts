@@ -17,10 +17,9 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  startSession() {
+  startSession(): void {
     this.session.createSession().subscribe(id => {
       this.router.navigate([id]);
-    })
+    });
   }
-
 }
