@@ -7,10 +7,10 @@ import { filter, map, mergeMap, shareReplay } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class SessionService {
-  private _activeSession: Observable<string>;
+  private _activeSession: string;
 
   constructor(private router: Router) {
-    this._activeSession = router.events.pipe(
+    router.events.pipe(
       filter(event => event instanceof NavigationEnd),
       map(event => {
         let route = this.router.routerState.root;
@@ -22,10 +22,9 @@ export class SessionService {
       }),
       mergeMap(route => route.paramMap),
       map(params => params.get('sessionId')),
-      shareReplay(1)
-    );
+    ).subscribe(session => {
+      this._activeSession = session;
 
-    this._activeSession.subscribe(session => {
       let title = 'Slidezy'
 
       if (session) {
@@ -36,7 +35,7 @@ export class SessionService {
     });
   }
 
-  get activeSession$() {
+  get activeSession() {
     return this._activeSession;
   }
 

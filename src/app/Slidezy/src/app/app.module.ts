@@ -11,10 +11,12 @@ import { MatCardModule } from '@angular/material/card';
 import { HomeComponent } from './home/home.component';
 import { SlideListComponent } from './slide-list/slide-list.component';
 import { NewSessionComponent } from './new-session/new-session.component';
+import { SlideComponent } from './slide/slide.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: ':sessionId', component: NewSessionComponent },
+  { path: ':sessionId/:slide', component: SlideComponent },
 ];
 
 @NgModule({
@@ -23,6 +25,7 @@ const routes: Routes = [
     SlideListComponent,
     HomeComponent,
     NewSessionComponent,
+    SlideComponent,
   ],
   imports: [
     BrowserModule,

@@ -8,9 +8,6 @@ import { SessionService } from './session.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  activeSession$: Observable<string>;
-
-  constructor(session: SessionService) {
-    this.activeSession$ = session.activeSession$;
+  constructor(public session: SessionService) {
   }
 }

@@ -9,6 +9,12 @@ app-sidenav {
     display: flex;
 }
 
+mat-drawer {
+    width: 20%;
+    min-width: 200px;
+    max-width: 400px;
+}
+
 mat-drawer-container {
     flex: 1 1 auto;
 }

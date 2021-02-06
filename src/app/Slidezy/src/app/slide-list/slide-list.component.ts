@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SlidesService } from '../slide/slides.service';
 
 @Component({
   selector: 'app-slide-list',
@@ -7,9 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SlideListComponent implements OnInit {
 
-  constructor() { }
+  constructor(public slides: SlidesService) { }
 
   ngOnInit(): void {
+
   }
 
 }
