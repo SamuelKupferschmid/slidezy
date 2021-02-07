@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { SessionService } from './session.service';
+import { SlidesService } from './slide/slides.service';
 
 @Component({
   selector: 'app-root',
@@ -7,6 +7,6 @@ import { SessionService } from './session.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  constructor(public session: SessionService) {
+  constructor(public slideService: SlidesService) {
   }
 }

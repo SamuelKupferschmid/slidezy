@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SessionService } from '../session.service';
+import { SlidesService } from '../slide/slides.service';
 
 @Component({
   selector: 'app-home',
@@ -11,14 +11,14 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private session: SessionService
+    private slideService: SlidesService
   ) { }
 
   ngOnInit(): void {
   }
 
   startSession(): void {
-    this.session.createSession().subscribe(id => {
+    this.slideService.createSession().subscribe(id => {
       this.router.navigate([id]);
     });
   }
