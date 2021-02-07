@@ -1,14 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { SlidesService } from '../slide/slides.service';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Session, SlidesService } from '../slide/slides.service';
 
 @Component({
   selector: 'app-slide-list',
   templateUrl: './slide-list.component.html',
-  styleUrls: ['./slide-list.component.scss']
+  styleUrls: ['./slide-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SlideListComponent implements OnInit {
+  session$: Observable<Session>;
 
-  constructor(public slides: SlidesService) { }
+  constructor(public slideService: SlidesService) {
+    this.session$ = slideService.session$;
+  }
 
   ngOnInit(): void {
 

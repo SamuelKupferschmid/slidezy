@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { distinctUntilChanged, filter, map, mergeMap } from 'rxjs/operators';
 
 @Injectable({
@@ -8,10 +8,7 @@ import { distinctUntilChanged, filter, map, mergeMap } from 'rxjs/operators';
 })
 export class SlidesService {
 
-  activeSession: string;
-  activeSlide: Slide;
-
-  slides: Slide[] = [];
+  private _session$ = new BehaviorSubject<Session>(null);
 
   constructor(
     private router: Router
@@ -29,27 +26,49 @@ export class SlidesService {
       mergeMap(route => route.paramMap)
     );
 
-    params$.pipe(
-      map(params => params.get('slide')),
-      distinctUntilChanged())
-      .subscribe(slide => {
-        if (slide) {
-          this.activeSlide = this.slides[parseInt(slide, 10) - 1];
-        } else {
-          this.activeSlide = null;
-        }
-      });
-
-    params$.pipe(
+    const sessionId$ = params$.pipe(
       map(params => params.get('sessionId')),
       distinctUntilChanged()
-    ).subscribe(session => {
-      this.activeSession = session;
+    );
 
+
+    sessionId$.pipe(
+      filter(id => !id)
+    ).subscribe(() => {
+      this._session$.next(null);
+    });
+
+    sessionId$.pipe(
+      filter(id => !!id),
+      mergeMap(id => of({ id, slides: [], selectedSlideIndex: 0 } as Session))
+    ).subscribe(session => {
+      this._session$.next(session)
+    });
+
+    params$.pipe(
+      map(params => params.get('slide')),
+      distinctUntilChanged(),
+    ).subscribe(slide => {
+
+      const index = slide ? parseInt(slide, 10) - 1 : null;
+
+      if (this._session$.value) {
+        this._session$.next({
+          ...this._session$.value,
+          selectedSlideIndex: index
+        });
+      }
+    });
+
+    this._session$.subscribe(session => {
       let title = 'Slidezy';
 
-      if (session) {
-        title += ` | ${session}`;
+      if (session?.id) {
+        title += ` / ${session.id}`;
+      }
+
+      if (session?.selectedSlideIndex != null) {
+        title += ` / Slide ${session.selectedSlideIndex + 1}`;
       }
 
       document.title = title;
@@ -57,13 +76,18 @@ export class SlidesService {
   }
 
   addSlide(): void {
-    const index = this.slides.length;
-    this.slides.push({ index });
-    this.navigateToSlide(index);
+    const arr = this._session$.value.slides;
+    const newSlide = { index: arr.length };
+    this._session$.next({
+      ...this._session$.value,
+      slides: [...this._session$.value.slides, newSlide]
+    });
+
+    this.navigateToSlide(newSlide.index);
   }
 
   navigateToSlide(page: number): void {
-    this.router.navigate([this.activeSession, (page + 1).toString()]);
+    this.router.navigate([this._session$.value.id, (page + 1).toString()]);
   }
 
   createSession(): Observable<string> {
@@ -76,6 +100,22 @@ export class SlidesService {
 
     return of(result);
   }
+
+  get session$() {
+    return this._session$.asObservable();
+  }
+
+  get currentSlide$() {
+    return this._session$.pipe(
+      map(session => session.slides[session.selectedSlideIndex])
+    );
+  }
+}
+
+export interface Session {
+  id: string;
+  slides: Slide[];
+  selectedSlideIndex: number;
 }
 
 export interface Slide {

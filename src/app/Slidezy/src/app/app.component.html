@@ -1,17 +1,19 @@
-<mat-toolbar color="primary">
-  <button [disabled]="!slideService.activeSession" mat-icon-button aria-label="Toggle Menu">
-    <mat-icon>menu</mat-icon>
-  </button>
-  <h1>slidezy</h1>
+<ng-container *ngIf="session$ | async as session">
+  <mat-toolbar color="primary">
+    <button [disabled]="!session.session" mat-icon-button aria-label="Toggle Menu">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <h1>slidezy</h1>
 
-  <h1 *ngIf="slideService.activeSession" class="title-link">.app/{{slideService.activeSession}}</h1>
+    <h1 *ngIf="session.session" class="title-link">.app/{{session.session.id}}</h1>
 
-</mat-toolbar>
-<mat-drawer-container autosize #matDrawer class="example-container">
-  <mat-drawer *ngIf="slideService.activeSession" mode="side" opened>
-    <app-slide-list></app-slide-list>
-  </mat-drawer>
-  <mat-drawer-content>
-    <router-outlet></router-outlet>
-  </mat-drawer-content>
-</mat-drawer-container>
+  </mat-toolbar>
+  <mat-drawer-container autosize #matDrawer class="example-container">
+    <mat-drawer *ngIf="session.session" mode="side" opened>
+      <app-slide-list></app-slide-list>
+    </mat-drawer>
+    <mat-drawer-content>
+      <router-outlet></router-outlet>
+    </mat-drawer-content>
+  </mat-drawer-container>
+</ng-container>
