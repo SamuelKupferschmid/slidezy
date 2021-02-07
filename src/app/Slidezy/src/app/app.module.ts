@@ -12,6 +12,8 @@ import { HomeComponent } from './home/home.component';
 import { SlideListComponent } from './slide-list/slide-list.component';
 import { NewSessionComponent } from './new-session/new-session.component';
 import { SlideComponent } from './slide/slide.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { FunctionsInterceptor } from './FunctionsInterceptor';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -38,7 +40,12 @@ const routes: Routes = [
     MatSidenavModule,
     MatCardModule,
   ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: FunctionsInterceptor,
+    multi: true,
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
