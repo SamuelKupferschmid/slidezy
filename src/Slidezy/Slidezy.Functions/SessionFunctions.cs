@@ -7,6 +7,8 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Slidezy.Functions
 {
@@ -20,13 +22,24 @@ namespace Slidezy.Functions
 
             return new OkObjectResult(new Session
             {
-                Id = id
+                Id = id,
+                SelectedSlideIndex = 0,
+                Slides = new[] {new Slide{
+                Index = 0 }
+                }
             });
         }
 
         public class Session
         {
             public string Id { get; set; }
+            public int SelectedSlideIndex { get; set; }
+            public IEnumerable<Slide> Slides {get;set;}
+        }
+
+        public class Slide
+        {
+            public int Index { get; set; }
         }
     }
 }

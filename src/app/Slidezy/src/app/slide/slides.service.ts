@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { distinctUntilChanged, filter, map, mergeMap } from 'rxjs/operators';
+import { ApiService } from '../api.service';
+import { EventBusService } from '../event-bus.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,9 @@ export class SlidesService {
   private _session$ = new BehaviorSubject<Session>(null);
 
   constructor(
-    private router: Router
+    private router: Router,
+    api: ApiService,
+    eventBus: EventBusService,
   ) {
     const params$ = router.events.pipe(
       filter(event => event instanceof NavigationEnd),
@@ -40,9 +44,13 @@ export class SlidesService {
 
     sessionId$.pipe(
       filter(id => !!id),
-      mergeMap(id => of({ id, slides: [], selectedSlideIndex: 0 } as Session))
+      mergeMap(id => api.getSession(id)),
+      mergeMap(session => eventBus.joinSession(session.id).pipe(
+        map(() => session))
+      )
     ).subscribe(session => {
-      this._session$.next(session)
+      this._session$.next(session);
+      this.navigateToSlide(session.selectedSlideIndex);
     });
 
     params$.pipe(

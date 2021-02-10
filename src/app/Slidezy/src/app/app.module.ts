@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
@@ -12,8 +12,9 @@ import { HomeComponent } from './home/home.component';
 import { SlideListComponent } from './slide-list/slide-list.component';
 import { NewSessionComponent } from './new-session/new-session.component';
 import { SlideComponent } from './slide/slide.component';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FunctionsInterceptor } from './FunctionsInterceptor';
+import { EventBusService } from './event-bus.service';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -32,6 +33,7 @@ const routes: Routes = [
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     RouterModule.forRoot(routes),
 
     MatToolbarModule,
@@ -44,8 +46,17 @@ const routes: Routes = [
     provide: HTTP_INTERCEPTORS,
     useClass: FunctionsInterceptor,
     multi: true,
+  }, {
+    provide: APP_INITIALIZER,
+    useFactory: eventBusInitializer,
+    deps: [EventBusService],
+    multi: true
   }],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
 
+export function eventBusInitializer(eventBus: EventBusService) {
+  return async () => await eventBus.connect();
+}
