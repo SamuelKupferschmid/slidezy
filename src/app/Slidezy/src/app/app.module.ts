@@ -13,7 +13,7 @@ import { SlideListComponent } from './slide-list/slide-list.component';
 import { NewSessionComponent } from './new-session/new-session.component';
 import { SlideComponent } from './slide/slide.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { FunctionsInterceptor } from './FunctionsInterceptor';
+import { FunctionsInterceptor } from './functionsInterceptor';
 import { EventBusService } from './event-bus/event-bus.service';
 
 const routes: Routes = [
