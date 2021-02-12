@@ -14,12 +14,11 @@ import { NewSessionComponent } from './new-session/new-session.component';
 import { SlideComponent } from './slide/slide.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FunctionsInterceptor } from './FunctionsInterceptor';
-import { EventBusService } from './event-bus.service';
+import { EventBusService } from './event-bus/event-bus.service';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: ':sessionId', component: NewSessionComponent },
-  { path: ':sessionId/:slide', component: SlideComponent },
+  { path: ':sessionId', component: SlideComponent },
 ];
 
 @NgModule({

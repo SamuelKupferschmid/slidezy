@@ -3,7 +3,8 @@ import { NavigationEnd, Router } from '@angular/router';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { distinctUntilChanged, filter, map, mergeMap } from 'rxjs/operators';
 import { ApiService } from '../api.service';
-import { EventBusService } from '../event-bus.service';
+import { AddSlideEvent, EventBusService, NamedEvent, SelectSlideEvent } from '../event-bus/event-bus.service';
+import { Slide } from './types';
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +15,8 @@ export class SlidesService {
 
   constructor(
     private router: Router,
-    api: ApiService,
     eventBus: EventBusService,
+    api: ApiService,
   ) {
     const params$ = router.events.pipe(
       filter(event => event instanceof NavigationEnd),
@@ -50,7 +51,6 @@ export class SlidesService {
       )
     ).subscribe(session => {
       this._session$.next(session);
-      this.navigateToSlide(session.selectedSlideIndex);
     });
 
     params$.pipe(
@@ -81,21 +81,38 @@ export class SlidesService {
 
       document.title = title;
     });
+
+    eventBus.events$.subscribe(event => this.handleEvent(event));
   }
 
-  addSlide(): void {
-    const arr = this._session$.value.slides;
-    const newSlide = { index: arr.length };
+  private handleEvent<T>(event: NamedEvent<T>) {
+    switch (event.method) {
+      case 'addSlide':
+        this.handleAddSlide(event as unknown as AddSlideEvent);
+        break;
+      case 'selectSlide':
+        this.handleSelectSlide(event as unknown as SelectSlideEvent);
+        break;
+    };
+  }
+
+  private handleAddSlide(event: AddSlideEvent) {
+    const slides = this._session$.value.slides;
     this._session$.next({
       ...this._session$.value,
-      slides: [...this._session$.value.slides, newSlide]
+      slides: [
+        ...slides.slice(0, event.index),
+        { id: event.id, index: event.index },
+        ...slides.slice(event.index)
+      ]
     });
-
-    this.navigateToSlide(newSlide.index);
   }
 
-  navigateToSlide(page: number): void {
-    this.router.navigate([this._session$.value.id, (page + 1).toString()]);
+  private handleSelectSlide(event: SelectSlideEvent) {
+    this._session$.next({
+      ...this._session$.value,
+      selectedSlideIndex: this._session$.value.slides.findIndex(slide => slide.id === event.id)
+    });
   }
 
   createSession(): Observable<string> {
@@ -115,7 +132,7 @@ export class SlidesService {
 
   get currentSlide$() {
     return this._session$.pipe(
-      map(session => session.slides[session.selectedSlideIndex])
+      map(session => session?.slides[session?.selectedSlideIndex])
     );
   }
 }
@@ -124,13 +141,4 @@ export interface Session {
   id: string;
   slides: Slide[];
   selectedSlideIndex: number;
-}
-
-export interface Slide {
-  index: number;
-}
-
-export interface Coordinate {
-  x: number;
-  y: number;
 }

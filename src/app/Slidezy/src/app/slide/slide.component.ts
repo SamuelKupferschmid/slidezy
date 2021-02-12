@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Slide, SlidesService } from './slides.service';
+import { SlidesService } from './slides.service';
+import { Slide } from './types';
 
 @Component({
   selector: 'app-slide',

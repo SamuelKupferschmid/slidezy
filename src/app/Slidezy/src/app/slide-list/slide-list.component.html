@@ -1,11 +1,13 @@
 <ng-container *ngIf="session$ | async as session">
-    <div *ngFor="let slide of session.slides" (click)="slideService.navigateToSlide(slide.index)">Slide {{ slide.index +
+    <div *ngFor="let slide of session.slides" (click)="eventBus.selectSlide(session.id, {id: slide.id})">Slide {{
+        slide.index
+        +
         1 }}
     </div>
     <button mat-stroked-button>
         <mat-icon>upload_file</mat-icon> Upload Slides
     </button>
-    <button (click)="slideService.addSlide()" mat-stroked-button>
+    <button (click)="addSlide(session)" mat-stroked-button>
         <mat-icon>add</mat-icon> Add Slide
     </button>
 </ng-container>

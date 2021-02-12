@@ -1,1 +1,3 @@
-Slide {{ (currentSlide$ | async).index + 1 }}
+<ng-container *ngIf="currentSlide$ | async as currentSlide">
+    Slide {{ currentSlide.index + 1 }}
+</ng-container>

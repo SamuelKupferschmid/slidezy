@@ -19,26 +19,24 @@ namespace Slidezy.Functions
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = "sessions/{id}")] HttpRequest req, string id,
             ILogger log)
         {
-
-            return new OkObjectResult(new Session
+            return await Task.FromResult(new OkObjectResult(new Session
             {
                 Id = id,
-                SelectedSlideIndex = 0,
-                Slides = new[] {new Slide{
-                Index = 0 }
-                }
-            });
+                SelectedSlideIndex = null,
+                Slides = Enumerable.Empty<Slide>()
+            }));
         }
 
         public class Session
         {
             public string Id { get; set; }
-            public int SelectedSlideIndex { get; set; }
-            public IEnumerable<Slide> Slides {get;set;}
+            public int? SelectedSlideIndex { get; set; }
+            public IEnumerable<Slide> Slides { get; set; }
         }
 
         public class Slide
         {
+            public Guid Id { get; set; }
             public int Index { get; set; }
         }
     }
