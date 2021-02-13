@@ -15,16 +15,17 @@ namespace Slidezy.Functions
     public static class SessionFunctions
     {
         [FunctionName(nameof(GetSession))]
-        public static async Task<IActionResult> GetSession(
+        public static IActionResult GetSession(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "sessions/{id}")] HttpRequest req, string id,
+            [CosmosDB(
+                databaseName: "slidezy-db",
+                collectionName: "sessions",
+                ConnectionStringSetting = "CosmosDBConnection",
+                Id = "{id}",
+                PartitionKey = "{id}")] Session session,
             ILogger log)
         {
-            return await Task.FromResult(new OkObjectResult(new Session
-            {
-                Id = id,
-                SelectedSlideIndex = null,
-                Slides = Enumerable.Empty<Slide>()
-            }));
+            return new OkObjectResult(session);
         }
 
         public class Session
