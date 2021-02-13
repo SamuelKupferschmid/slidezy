@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HubConnectionBuilder, HubConnection } from '@microsoft/signalr'
 import { from, Subject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { Pencil } from '../slide/types';
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class EventBusService {
 
   constructor() {
     this._connection = new HubConnectionBuilder()
-      .withUrl("https://localhost:44338/sessions")
+      .withUrl(environment.eventHub)
       .withAutomaticReconnect()
       .build();
 

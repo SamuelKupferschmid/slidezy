@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  functionsApi: 'http://localhost:7071/api'
+  functionsApi: 'http://localhost:7071/api',
+  eventHub: 'https://localhost:44338/sessions',
 };
 
 /*

@@ -1,0 +1,62 @@
+name: 'WebApp Deployment'
+
+env:
+  AZURE_webAPP_NAME: app-slidezy-prod
+  API_PROJECT_ROOT: "src/Slidezy/Slidezy"
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the main branch
+on:
+  push:
+    branches: [ main ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v2
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Update appsettings.json
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: '${{env.API_PROJECT_ROOT}}/appsettings.json'
+        env:
+          ConnectionStrings.StorageConnectionString: ${{ secrets.AZURE_BLOB_STORAGE_CONNECTION_STRING }}
+
+      - name: App Service Web App Build Action
+        uses: Azure/appservice-build@v2
+        with:
+          # Relative path (within the repository) to the source directory of the project you want to build; if no value is provided for this, the root of the repository ("GITHUB_WORKSPACE" environment variable) will be built.
+          source-directory: ${{ env.API_PROJECT_ROOT }} # optional
+          # Programming platform used to build the web app; if no value is provided, Oryx will determine the platform to build with. The supported values are "dotnet", "nodejs", "php" and "python".
+          platform: dotnet # optional
+          # Version of the programming platform used to build the web app; if no value is provided, Oryx will determine the version needed to build the repository.
+          # platform-version: # optional
+          # The directory where the build output has to be put.
+          # output-directory: # optional
+
+      - name: Azure WebApp
+        uses: Azure/webapps-deploy@v2
+        with:
+          # Name of the Azure Web App
+          app-name: ${{ env.AZURE_webAPP_NAME }}
+          # Applies to Web Apps(Windows and Linux) and Web App Containers(linux). Multi container scenario not supported. Publish profile (*.publishsettings) file contents with Web Deploy secrets
+          # publish-profile: # optional
+          # Enter an existing Slot other than the Production slot
+          # slot-name: # optional, default is production
+          # Applies to Web App only: Path to package or folder. *.zip, *.war, *.jar or a folder to deploy
+          package: ${{ env.API_PROJECT_ROOT }}/bin/Release/net5.0/publish/ # optional, default is .
+          # Applies to Web App Containers only: Specify the fully qualified container image(s) name. For example, 'myregistry.azurecr.io/nginx:latest' or 'python:3.7.2-alpine/'. For multi-container scenario multiple container image names can be provided (multi-line separated)
+          # images: 
+          # Applies to Web App Containers only: Path of the Docker-Compose file. Should be a fully qualified path or relative to the default working directory. Required for multi-container scenario
+          # configuration-file: # optional
+          # Enter the start up command. For ex. dotnet run or dotnet run
+          # startup-command: # optional
