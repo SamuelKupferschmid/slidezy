@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { HubConnectionBuilder, HubConnection } from '@microsoft/signalr'
 import { from, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -9,6 +9,7 @@ import { Pencil } from '../slide/types';
 export class EventBusService {
   private _connection: HubConnection;
   private _events$ = new Subject<NamedEvent<any>>();
+  private _zone = new NgZone({ enableLongStackTrace: false });
 
   constructor() {
     this._connection = new HubConnectionBuilder()
@@ -21,10 +22,10 @@ export class EventBusService {
   }
 
   private registerHandler<T>(method: keyof EventBusService) {
-    this._connection.on(method, (event: T) => this._events$.next({
+    this._connection.on(method, (event: T) => this._zone.run(() => this._events$.next({
       method,
       ...event
-    }))
+    })));
   }
 
   get events$() {
