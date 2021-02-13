@@ -11,9 +11,10 @@ import { Session, SlidesService } from './slide/slides.service';
 })
 export class AppComponent {
 
-  session$: Observable<{ session: Session }>;
-
   @ViewChild('app') appRef: ElementRef<HTMLDivElement>;
+
+  session$: Observable<{ session: Session }>;
+  opened = true;
 
   constructor(slideService: SlidesService) {
     this.session$ = slideService.session$.pipe(
@@ -21,7 +22,12 @@ export class AppComponent {
     );
   }
 
+  toggleMenu() {
+    this.opened = !this.opened;
+  }
+
   enterFullscreen(mode: FullscreenMode) {
+    this.opened = false;
     const element = mode === 'app' ? this.appRef.nativeElement : document.querySelector('#canvas');
     element.requestFullscreen();
 

@@ -1,6 +1,6 @@
 <div #app *ngIf="session$ | async as session" class="app-wrapper">
   <mat-toolbar color="primary">
-    <button [disabled]="!session.session" mat-icon-button aria-label="Toggle Menu">
+    <button [disabled]="!session.session" (click)="toggleMenu()" mat-icon-button aria-label="Toggle Menu">
       <mat-icon>menu</mat-icon>
     </button>
     <h1>slidezy</h1>
@@ -25,7 +25,7 @@
 
   </mat-toolbar>
   <mat-drawer-container autosize #matDrawer class="example-container">
-    <mat-drawer *ngIf="session.session" mode="side" opened>
+    <mat-drawer *ngIf="session.session" mode="side" [opened]="opened">
       <app-slide-list></app-slide-list>
     </mat-drawer>
     <mat-drawer-content>
