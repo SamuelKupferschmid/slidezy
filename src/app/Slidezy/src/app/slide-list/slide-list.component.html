@@ -2,7 +2,7 @@
 
     <div *ngFor="let slide of session.slides" (click)="eventBus.selectSlide(session.id, {id: slide.id})"
         style="--aspect-ratio:16/9;">
-        <img [attr.src]="getImageUrl(session, slide)" />
+        <app-slide [class.mat-elevation-z4]="session.selectedSlideIndex == slide.index" [slide]="slide"></app-slide>
 
     </div>
     <button mat-stroked-button>

@@ -2,7 +2,7 @@ import { Injectable, NgZone } from '@angular/core';
 import { HubConnectionBuilder, HubConnection } from '@microsoft/signalr'
 import { from, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Pencil } from '../slide/types';
+import { Pencil } from '../types';
 @Injectable({
   providedIn: 'root'
 })

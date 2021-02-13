@@ -1,9 +1,1 @@
-<ng-container *ngIf="currentSlide$ | async as currentSlide">
-
-    <div class="mat-elevation-z8" style="--aspect-ratio:16/9;">
-        <div>
-            Slide {{ currentSlide.index + 1 }}
-        </div>
-
-    </div>
-</ng-container>
+<img style="width: 100%;" [attr.src]="getImageUrl(slide)">

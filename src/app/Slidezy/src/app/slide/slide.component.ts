@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { SlidesService } from './slides.service';
-import { Slide } from './types';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
+import { environment } from 'src/environments/environment';
+import { Slide } from '../types';
 
 @Component({
   selector: 'app-slide',
@@ -11,13 +11,15 @@ import { Slide } from './types';
 })
 export class SlideComponent implements OnInit {
 
-  currentSlide$: Observable<Slide>;
+  @Input() slide: Slide;
 
-  constructor(slides: SlidesService) {
-    this.currentSlide$ = slides.currentSlide$;
+  constructor(private sanitizer: DomSanitizer) {
   }
 
   ngOnInit(): void {
   }
 
+  getImageUrl(slide: Slide) {
+    return this.sanitizer.bypassSecurityTrustUrl(`${environment.storageUrl}/${slide.background}`);
+  }
 }

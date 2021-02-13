@@ -15,10 +15,11 @@ import { SlideComponent } from './slide/slide.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FunctionsInterceptor } from './functionsInterceptor';
 import { EventBusService } from './event-bus/event-bus.service';
+import { CanvasComponent } from './canvas/canvas.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: ':sessionId', component: SlideComponent },
+  { path: ':sessionId', component: CanvasComponent },
 ];
 
 @NgModule({
@@ -28,6 +29,7 @@ const routes: Routes = [
     HomeComponent,
     NewSessionComponent,
     SlideComponent,
+    CanvasComponent,
   ],
   imports: [
     BrowserModule,

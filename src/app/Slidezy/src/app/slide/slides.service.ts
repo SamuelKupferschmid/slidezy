@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { distinctUntilChanged, filter, map, mergeMap } from 'rxjs/operators';
 import { ApiService } from '../api.service';
 import { AddSlideEvent, EventBusService, NamedEvent, SelectSlideEvent } from '../event-bus/event-bus.service';
-import { Slide } from './types';
+import { Slide } from '../types';
 
 @Injectable({
   providedIn: 'root'
