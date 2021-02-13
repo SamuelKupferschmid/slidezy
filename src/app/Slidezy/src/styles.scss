@@ -30,6 +30,10 @@ mat-drawer-content > *:nth-child(2) {
     flex-direction: row;
 }
 
+.flex-1 {
+    flex: 1;
+}
+
 .flex-column {
     display: flex;
     flex-direction: column;

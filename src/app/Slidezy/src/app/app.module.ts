@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatCardModule } from '@angular/material/card';
+import { MatMenuModule } from '@angular/material/menu';
 import { HomeComponent } from './home/home.component';
 import { SlideListComponent } from './slide-list/slide-list.component';
 import { NewSessionComponent } from './new-session/new-session.component';
@@ -42,6 +43,7 @@ const routes: Routes = [
     MatButtonModule,
     MatSidenavModule,
     MatCardModule,
+    MatMenuModule,
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

@@ -1,6 +1,6 @@
 <ng-container *ngIf="currentSlide$ | async as currentSlide">
 
-    <div class="mat-elevation-z8" style="--aspect-ratio:16/9;">
+    <div id="canvas" class="mat-elevation-z8" style="--aspect-ratio:16/9;">
         <app-slide [slide]="currentSlide"></app-slide>
 
     </div>

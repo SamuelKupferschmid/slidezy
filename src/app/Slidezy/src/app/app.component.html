@@ -1,4 +1,4 @@
-<ng-container *ngIf="session$ | async as session">
+<div #app *ngIf="session$ | async as session">
   <mat-toolbar color="primary">
     <button [disabled]="!session.session" mat-icon-button aria-label="Toggle Menu">
       <mat-icon>menu</mat-icon>
@@ -6,6 +6,22 @@
     <h1>slidezy</h1>
 
     <h1 *ngIf="session.session" class="title-link">.app/{{session.session.id}}</h1>
+    <div class="flex-1"></div>
+    <div>
+      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+        <mat-icon>fullscreen</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button (click)="enterFullscreen('app')" mat-menu-item>
+          <mat-icon>tablet_mac</mat-icon>
+          <span>Enter App Fullscreen</span>
+        </button>
+        <button (click)="enterFullscreen('canvas')" mat-menu-item>
+          <mat-icon>tv</mat-icon>
+          <span>Enter Canvas Fullscreen</span>
+        </button>
+      </mat-menu>
+    </div>
 
   </mat-toolbar>
   <mat-drawer-container autosize #matDrawer class="example-container">
@@ -16,4 +32,4 @@
       <router-outlet></router-outlet>
     </mat-drawer-content>
   </mat-drawer-container>
-</ng-container>
+</div>
