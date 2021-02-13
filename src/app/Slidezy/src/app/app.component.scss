@@ -8,3 +8,9 @@
 .title-link {
     font-weight: 200;
 }
+
+.app-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}

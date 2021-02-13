@@ -1,4 +1,4 @@
-<div #app *ngIf="session$ | async as session">
+<div #app *ngIf="session$ | async as session" class="app-wrapper">
   <mat-toolbar color="primary">
     <button [disabled]="!session.session" mat-icon-button aria-label="Toggle Menu">
       <mat-icon>menu</mat-icon>
