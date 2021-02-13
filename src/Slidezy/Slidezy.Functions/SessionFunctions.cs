@@ -16,7 +16,7 @@ namespace Slidezy.Functions
     {
         [FunctionName(nameof(GetSession))]
         public static async Task<IActionResult> GetSession(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "sessions/{id}")] HttpRequest req, string id,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "sessions/{id}")] HttpRequest req, string id,
             ILogger log)
         {
             return await Task.FromResult(new OkObjectResult(new Session

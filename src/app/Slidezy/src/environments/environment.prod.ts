@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  functionsApi: 'http://localhost:7071/api'
+  functionsApi: 'https://func-slidezy-prod.azurewebsites.net/api'
 };
