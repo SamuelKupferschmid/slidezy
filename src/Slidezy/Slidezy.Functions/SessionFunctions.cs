@@ -39,6 +39,7 @@ namespace Slidezy.Functions
         {
             public Guid Id { get; set; }
             public int Index { get; set; }
+            public string Background { get; set; }
         }
     }
 }

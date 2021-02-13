@@ -1,8 +1,9 @@
 <ng-container *ngIf="session$ | async as session">
-    <div *ngFor="let slide of session.slides" (click)="eventBus.selectSlide(session.id, {id: slide.id})">Slide {{
-        slide.index
-        +
-        1 }}
+
+    <div *ngFor="let slide of session.slides" (click)="eventBus.selectSlide(session.id, {id: slide.id})"
+        style="--aspect-ratio:16/9;">
+        <img [attr.src]="getImageUrl(session, slide)" />
+
     </div>
     <button mat-stroked-button>
         <mat-icon>upload_file</mat-icon> Upload Slides

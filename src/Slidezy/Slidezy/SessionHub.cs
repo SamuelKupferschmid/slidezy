@@ -30,6 +30,8 @@ namespace Slidezy
     {
         public Guid Id { get; set; }
         public int Index { get; set; }
+
+        public string Background { get; set; }
     }
 
     public class SelectSlideEvent

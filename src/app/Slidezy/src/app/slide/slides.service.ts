@@ -102,7 +102,7 @@ export class SlidesService {
       ...this._session$.value,
       slides: [
         ...slides.slice(0, event.index),
-        { id: event.id, index: event.index },
+        { ...event },
         ...slides.slice(event.index)
       ]
     });

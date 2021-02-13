@@ -69,6 +69,7 @@ export interface StartPathEvent {
 export interface AddSlideEvent {
   id: string;
   index: number;
+  background: string;
 }
 
 export interface SelectSlideEvent {

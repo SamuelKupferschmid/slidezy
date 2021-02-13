@@ -1,6 +1,7 @@
 export interface Slide {
     id: string,
     index: number;
+    background: string;
 }
 
 export interface Path {
