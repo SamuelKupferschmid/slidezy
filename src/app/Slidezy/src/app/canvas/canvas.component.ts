@@ -26,17 +26,35 @@ export class CanvasComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  touchstart(ev: TouchEvent) {
+  touchstart(session: Session, ev: TouchEvent) {
     ev.preventDefault();
+    this.currentPathId = Guid.create().toString();
+    this.eventBus.startPath(session.id, {
+      id: this.currentPathId,
+      pencil: null,
+      coordinate: this.getTouchCoordinate(ev)
+    });
   }
 
-  touchmove(ev: TouchEvent) {
+  touchmove(session: Session, ev: TouchEvent) {
     ev.preventDefault();
-    console.log(this.getTouchCoordinate(ev));
+
+    if (this.currentPathId) {
+      this.eventBus.continuePath(session.id, {
+        id: this.currentPathId,
+        coordinate: this.getTouchCoordinate(ev)
+      });
+    }
   }
 
-  touchend(ev: TouchEvent) {
+  touchend(session: Session, ev: TouchEvent) {
     ev.preventDefault();
+    this.eventBus.completePath(session.id, {
+      id: this.currentPathId,
+      coordinate: this.getTouchCoordinate(ev)
+    });
+
+    this.currentPathId = null;
   }
 
 
@@ -73,15 +91,15 @@ export class CanvasComponent implements OnInit {
 
   private getTouchCoordinate(ev: TouchEvent): Coordinate {
     return {
-      x: 1920 * ev.touches[0].clientX / (ev.currentTarget as HTMLElement).clientWidth,
-      y: 1080 * ev.touches[0].clientY / (ev.currentTarget as HTMLElement).clientHeight,
+      x: 1920 * ((ev.touches[0] ?? ev.changedTouches[0]).clientX - (ev.currentTarget as any).getBoundingClientRect().x) / (ev.currentTarget as HTMLElement).clientWidth,
+      y: 1080 * ((ev.touches[0] ?? ev.changedTouches[0]).clientY - (ev.currentTarget as any).getBoundingClientRect().y) / (ev.currentTarget as HTMLElement).clientHeight,
     }
   }
 
   private getMouseCoordinate(ev: MouseEvent): Coordinate {
     return {
-      x: 1920 * ev.offsetX / (ev.currentTarget as HTMLElement).clientWidth,
-      y: 1080 * ev.offsetY / (ev.currentTarget as HTMLElement).clientHeight,
+      x: 1920 * (ev.clientX - (ev.currentTarget as any).getBoundingClientRect().x) / (ev.currentTarget as HTMLElement).clientWidth,
+      y: 1080 * (ev.clientY - (ev.currentTarget as any).getBoundingClientRect().y) / (ev.currentTarget as HTMLElement).clientHeight,
     }
   }
 
