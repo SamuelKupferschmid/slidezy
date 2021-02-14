@@ -22,11 +22,13 @@ export class EventBusService {
     this.registerHandler('startPath');
     this.registerHandler('continuePath');
     this.registerHandler('completePath');
+    this.registerHandler('clearSlidePaths');
   }
 
   private registerHandler<T>(method: keyof EventBusService) {
     this._connection.on(method, (event: T) => this._zone.run(() => this._events$.next({
       method,
+      remote: true,
       ...event
     })));
   }
@@ -42,6 +44,8 @@ export class EventBusService {
     });
     this._connection.send(method, sessionId, event);
   }
+
+
 
   addSlide(sessionId: string, event: AddSlideEvent) {
     this.emit(sessionId, 'addSlide', event);
@@ -62,6 +66,12 @@ export class EventBusService {
   completePath(sessionId: string, event: CompletePathEvent) {
     this.emit(sessionId, 'completePath', event);
   }
+
+  clearSlidePaths(sessionId: string, event: ClearSlidePathsEvent) {
+    this.emit(sessionId, 'clearSlidePaths', event);
+  }
+
+
 
   async connect() {
     await this._connection.start();
@@ -102,6 +112,11 @@ export interface CompletePathEvent {
   coordinate: Coordinate;
 }
 
+export interface ClearSlidePathsEvent {
+  id: string;
+}
+
 export type NamedEvent<T> = T & {
+  remote: boolean;
   method: keyof EventBusService
 }

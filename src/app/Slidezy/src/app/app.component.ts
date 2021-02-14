@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { EventBusService } from './event-bus/event-bus.service';
 import { Session, SlidesService } from './slide/slides.service';
 
 @Component({
@@ -16,7 +17,10 @@ export class AppComponent {
   session$: Observable<{ session: Session }>;
   opened = true;
 
-  constructor(slideService: SlidesService) {
+  constructor(
+    private eventBus: EventBusService,
+    slideService: SlidesService
+  ) {
     this.session$ = slideService.session$.pipe(
       map(session => ({ session }))
     );
@@ -24,6 +28,13 @@ export class AppComponent {
 
   toggleMenu() {
     this.opened = !this.opened;
+  }
+
+  clearSlidePaths(session: Session) {
+    const id = session.slides[session.selectedSlideIndex].id;
+    this.eventBus.clearSlidePaths(session.id, {
+      id
+    });
   }
 
   enterFullscreen(mode: FullscreenMode) {

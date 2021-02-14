@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Newtonsoft.Json;
+
 namespace Slidezy.Core
 {
     public class Session
     {
+        [JsonProperty("id")]
         public string Id { get; set; }
         public int? SelectedSlideIndex { get; set; }
         public IEnumerable<Slide> Slides { get; set; }
@@ -12,6 +15,7 @@ namespace Slidezy.Core
 
     public class Slide
     {
+        
         public Guid Id { get; set; }
         public int Index { get; set; }
         public string Background { get; set; }
@@ -23,7 +27,7 @@ namespace Slidezy.Core
     {
         public string Id { get; set; }
         public Pencil Pencil { get; set; }
-        public Coordinate Coordinate { get; set; }
+        public IEnumerable<Coordinate> Coordinates { get; set; }
     }
 
     public class Pencil

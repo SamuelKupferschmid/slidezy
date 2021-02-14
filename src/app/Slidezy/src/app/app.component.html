@@ -8,6 +8,9 @@
     <h1 *ngIf="session.session" class="title-link">.app/{{session.session.id}}</h1>
     <div class="flex-1"></div>
     <div>
+      <button (click)="clearSlidePaths(session.session)" mat-icon-button>
+        <mat-icon>backspace</mat-icon>
+      </button>
       <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
         <mat-icon>fullscreen</mat-icon>
       </button>

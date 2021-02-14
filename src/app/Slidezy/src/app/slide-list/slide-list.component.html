@@ -5,10 +5,10 @@
         <app-slide [class.mat-elevation-z4]="session.selectedSlideIndex == slide.index" [slide]="slide"></app-slide>
 
     </div>
-    <button mat-stroked-button>
+    <button disabled mat-stroked-button>
         <mat-icon>upload_file</mat-icon> Upload Slides
     </button>
-    <button (click)="addSlide(session)" mat-stroked-button>
+    <button disabled (click)="addSlide(session)" mat-stroked-button>
         <mat-icon>add</mat-icon> Add Slide
     </button>
 </ng-container>

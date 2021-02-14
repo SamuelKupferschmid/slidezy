@@ -3,7 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { distinctUntilChanged, filter, map, mergeMap } from 'rxjs/operators';
 import { ApiService } from '../api.service';
-import { AddSlideEvent, CompletePathEvent, ContinuePathEvent, EventBusService, NamedEvent, SelectSlideEvent, StartPathEvent } from '../event-bus/event-bus.service';
+import { AddSlideEvent, ClearSlidePathsEvent, CompletePathEvent, ContinuePathEvent, EventBusService, NamedEvent, SelectSlideEvent, StartPathEvent } from '../event-bus/event-bus.service';
 import { Slide } from '../types';
 
 @Injectable({
@@ -16,7 +16,7 @@ export class SlidesService {
   constructor(
     private router: Router,
     eventBus: EventBusService,
-    api: ApiService,
+    private api: ApiService,
   ) {
     const params$ = router.events.pipe(
       filter(event => event instanceof NavigationEnd),
@@ -88,19 +88,22 @@ export class SlidesService {
   private handleEvent<T>(event: NamedEvent<T>) {
     switch (event.method) {
       case 'addSlide':
-        this.handleAddSlide(event as unknown as AddSlideEvent);
+        this.handleAddSlide(event as unknown as NamedEvent<AddSlideEvent>);
         break;
       case 'selectSlide':
-        this.handleSelectSlide(event as unknown as SelectSlideEvent);
+        this.handleSelectSlide(event as unknown as NamedEvent<SelectSlideEvent>);
         break;
       case 'startPath':
-        this.handleStartPath(event as unknown as StartPathEvent);
+        this.handleStartPath(event as unknown as NamedEvent<StartPathEvent>);
         break;
       case 'continuePath':
-        this.handleContinuePath(event as unknown as ContinuePathEvent);
+        this.handleContinuePath(event as unknown as NamedEvent<ContinuePathEvent>);
         break;
       case 'completePath':
-        this.handleCompletePath(event as unknown as CompletePathEvent);
+        this.handleCompletePath(event as unknown as NamedEvent<CompletePathEvent>);
+        break;
+      case 'clearSlidePaths':
+        this.handleClearSlidePaths(event as unknown as NamedEvent<ClearSlidePathsEvent>);
         break;
     };
   }
@@ -160,13 +163,39 @@ export class SlidesService {
     this._session$.next(newSession);
   }
 
-  private handleCompletePath(event: CompletePathEvent) {
+  private handleCompletePath(event: NamedEvent<CompletePathEvent>) {
     const newSession = { ...this._session$.value };
 
     const paths = newSession.slides[newSession.selectedSlideIndex].paths;
     paths[paths.length - 1].coordinates.push(event.coordinate);
 
     this._session$.next(newSession);
+
+    if (!event.remote) {
+      this.api.addPath(newSession.id, newSession.slides[newSession.selectedSlideIndex].id, paths[paths.length - 1]).subscribe();
+    }
+  }
+
+  private handleClearSlidePaths(event: NamedEvent<ClearSlidePathsEvent>) {
+    const session = this._session$.value;
+
+    this._session$.next({
+      ...session,
+      slides: session.slides.map(slide => {
+        if (slide.id === event.id) {
+          return {
+            ...slide,
+            paths: []
+          };
+        } else {
+          return slide;
+        }
+      })
+    });
+
+    if (!event.remote) {
+      this.api.clearSlidePaths(session.id, session.slides[session.selectedSlideIndex].id).subscribe();
+    }
   }
 
   createSession(): Observable<string> {

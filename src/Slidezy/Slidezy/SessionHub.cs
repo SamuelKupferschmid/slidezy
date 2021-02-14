@@ -41,6 +41,11 @@ namespace Slidezy
         {
             await this.Clients.OthersInGroup(sessionId).SendAsync(nameof(CompletePath), @event);
         }
+
+        public async Task ClearSlidePaths(string sessionId, ClearSlidePathsEvent @event)
+        {
+            await this.Clients.OthersInGroup(sessionId).SendAsync(nameof(ClearSlidePaths), @event);
+        }
     }
 
     public class AddSlideEvent
@@ -74,4 +79,10 @@ namespace Slidezy
         public Guid Id { get; set; }
         public Coordinate Coordinate { get; set; }
     }
+
+    public class ClearSlidePathsEvent
+    {
+        public Guid Id { get; set; }
+    }
 }
+
