@@ -73,5 +73,26 @@ namespace Slidezy.Functions
             slide.Paths = Enumerable.Empty<Core.Path>();
             result = session;
         }
+
+        [FunctionName(nameof(RemovePath))]
+        public static void RemovePath(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "sessions/{sessionId}/slides/{slideId}/paths/{pathId}")] HttpRequest req, string sessionId, Guid slideId, Guid pathId,
+            [CosmosDB(
+                databaseName: "slidezy-db",
+                collectionName: "sessions",
+                ConnectionStringSetting = "CosmosDBConnection",
+                Id = "{sessionId}",
+                PartitionKey = "{sessionId}")] Session session,
+            [CosmosDB(
+                databaseName: "slidezy-db",
+                collectionName: "sessions",
+                ConnectionStringSetting = "CosmosDBConnection",
+                PartitionKey = "{sessionId}")] out Session result,
+            ILogger log)
+        {
+            var slide = session.Slides.First(slide => slide.Id == slideId);
+            slide.Paths = slide.Paths.Where(path => path.Id != pathId);
+            result = session;
+        }
     }
 }

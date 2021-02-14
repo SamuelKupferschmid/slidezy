@@ -23,6 +23,7 @@ export class EventBusService {
     this.registerHandler('continuePath');
     this.registerHandler('completePath');
     this.registerHandler('clearSlidePaths');
+    this.registerHandler('removePath');
   }
 
   private registerHandler<T>(method: keyof EventBusService) {
@@ -71,6 +72,10 @@ export class EventBusService {
     this.emit(sessionId, 'clearSlidePaths', event);
   }
 
+  removePath(sessionId: string, event: RemovePathEvent) {
+    this.emit(sessionId, 'removePath', event);
+  }
+
 
 
   async connect() {
@@ -114,6 +119,11 @@ export interface CompletePathEvent {
 
 export interface ClearSlidePathsEvent {
   id: string;
+}
+
+export interface RemovePathEvent {
+  slideId: string;
+  pathId: string;
 }
 
 export type NamedEvent<T> = T & {

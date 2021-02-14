@@ -24,4 +24,8 @@ export class ApiService {
   clearSlidePaths(sessionId: string, slideId: string) {
     return this.httpClient.delete<void>(`sessions/${sessionId}/slides/${slideId}/paths`);
   }
+
+  removePath(sessionId: string, slideId: string, pathId: string) {
+    return this.httpClient.delete<void>(`sessions/${sessionId}/slides/${slideId}/paths/${pathId}`);
+  }
 }

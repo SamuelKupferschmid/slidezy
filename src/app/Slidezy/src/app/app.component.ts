@@ -37,6 +37,14 @@ export class AppComponent {
     });
   }
 
+  removeLastPath(session: Session) {
+    const slide = session.slides[session.selectedSlideIndex];
+    this.eventBus.removePath(session.id, {
+      slideId: slide.id,
+      pathId: slide.paths[slide.paths.length - 1].id
+    });
+  }
+
   enterFullscreen(mode: FullscreenMode) {
     this.opened = false;
     const element = mode === 'app' ? this.appRef.nativeElement : document.querySelector('#canvas');

@@ -46,6 +46,11 @@ namespace Slidezy
         {
             await this.Clients.OthersInGroup(sessionId).SendAsync(nameof(ClearSlidePaths), @event);
         }
+
+        public async Task RemovePath(string sessionId, RemovePathEvent @event)
+        {
+            await this.Clients.OthersInGroup(sessionId).SendAsync(nameof(RemovePath), @event);
+        }
     }
 
     public class AddSlideEvent
@@ -83,6 +88,12 @@ namespace Slidezy
     public class ClearSlidePathsEvent
     {
         public Guid Id { get; set; }
+    }
+
+    public class RemovePathEvent
+    {
+        public Guid SlideId { get; set; }
+        public Guid PathId { get; set; }
     }
 }
 

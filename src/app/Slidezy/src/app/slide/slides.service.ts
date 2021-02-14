@@ -3,7 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { distinctUntilChanged, filter, map, mergeMap } from 'rxjs/operators';
 import { ApiService } from '../api.service';
-import { AddSlideEvent, ClearSlidePathsEvent, CompletePathEvent, ContinuePathEvent, EventBusService, NamedEvent, SelectSlideEvent, StartPathEvent } from '../event-bus/event-bus.service';
+import { AddSlideEvent, ClearSlidePathsEvent, CompletePathEvent, ContinuePathEvent, EventBusService, NamedEvent, RemovePathEvent, SelectSlideEvent, StartPathEvent } from '../event-bus/event-bus.service';
 import { Slide } from '../types';
 
 @Injectable({
@@ -105,6 +105,9 @@ export class SlidesService {
       case 'clearSlidePaths':
         this.handleClearSlidePaths(event as unknown as NamedEvent<ClearSlidePathsEvent>);
         break;
+      case 'removePath':
+        this.handleRemovePath(event as unknown as NamedEvent<RemovePathEvent>);
+        break;
     };
   }
 
@@ -195,6 +198,28 @@ export class SlidesService {
 
     if (!event.remote) {
       this.api.clearSlidePaths(session.id, session.slides[session.selectedSlideIndex].id).subscribe();
+    }
+  }
+
+  private handleRemovePath(event: NamedEvent<RemovePathEvent>) {
+    const session = this._session$.value;
+
+    this._session$.next({
+      ...session,
+      slides: session.slides.map(slide => {
+        if (slide.id === event.slideId) {
+          return {
+            ...slide,
+            paths: slide.paths.filter(path => path.id !== event.pathId)
+          };
+        } else {
+          return slide;
+        }
+      })
+    });
+
+    if (!event.remote) {
+      this.api.removePath(session.id, event.slideId, event.pathId).subscribe();
     }
   }
 
