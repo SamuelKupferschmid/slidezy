@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slidezy", "Slidezy\Slidezy.csproj", "{73F60FE9-0584-45D7-AFFD-D514F748C8B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Slidezy", "Slidezy\Slidezy.csproj", "{73F60FE9-0584-45D7-AFFD-D514F748C8B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slidezy.Functions", "Slidezy.Functions\Slidezy.Functions.csproj", "{46C10E0E-2064-4892-9609-CF9D263B4C6F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Slidezy.Functions", "Slidezy.Functions\Slidezy.Functions.csproj", "{46C10E0E-2064-4892-9609-CF9D263B4C6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slidezy.Core", "Slidezy.Core\Slidezy.Core.csproj", "{5B91A0AD-9CFF-4618-9D32-201525B39CCB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{46C10E0E-2064-4892-9609-CF9D263B4C6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46C10E0E-2064-4892-9609-CF9D263B4C6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46C10E0E-2064-4892-9609-CF9D263B4C6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B91A0AD-9CFF-4618-9D32-201525B39CCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B91A0AD-9CFF-4618-9D32-201525B39CCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B91A0AD-9CFF-4618-9D32-201525B39CCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B91A0AD-9CFF-4618-9D32-201525B39CCB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

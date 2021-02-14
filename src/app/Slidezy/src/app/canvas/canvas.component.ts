@@ -15,6 +15,7 @@ export class CanvasComponent implements OnInit {
   session$: Observable<Session>;
 
   private currentPathId: string;
+
   constructor(
     private eventBus: EventBusService,
     slides: SlidesService

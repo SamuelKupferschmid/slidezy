@@ -144,12 +144,18 @@ export class SlidesService {
   }
 
   private handleContinuePath(event: ContinuePathEvent) {
-    const newSession = {
-      ...this._session$.value, slides: [...this._session$.value.slides]
-    };
+    const newSession = { ...this._session$.value };
 
     const paths = newSession.slides[newSession.selectedSlideIndex].paths;
-    paths[paths.length - 1].coordinates.push(event.coordinate);
+    const path = paths[paths.length - 1];
+    paths[paths.length - 1] = {
+      ...path,
+      coordinates: [...path.coordinates, event.coordinate]
+    };
+
+    newSession.slides[newSession.selectedSlideIndex] = {
+      ...newSession.slides[newSession.selectedSlideIndex]
+    };
 
     this._session$.next(newSession);
   }
