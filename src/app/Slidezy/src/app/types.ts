@@ -2,10 +2,13 @@ export interface Slide {
     id: string,
     index: number;
     background: string;
+    paths: Path[];
 }
 
 export interface Path {
+    id: string;
     pencil: Pencil;
+    coordinates: Coordinate[];
 }
 
 export interface Coordinate {

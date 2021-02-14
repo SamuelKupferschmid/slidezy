@@ -1,7 +1,8 @@
-<ng-container *ngIf="currentSlide$ | async as currentSlide">
-
+<ng-container *ngIf="session$ | async as session">
     <div id="canvas" class="mat-elevation-z8" style="--aspect-ratio:16/9;">
-        <app-slide [slide]="currentSlide"></app-slide>
-
+        <app-slide (touchstart)="touchstart(session, $event)" (touchmove)="touchmove(session, $event)"
+            (touchend)="touchend(session, $event)" (mousedown)="mousedown(session, $event)"
+            (mousemove)="mousemove(session, $event)" (mouseup)="mouseup(session, $event)"
+            [slide]="session.slides[session.selectedSlideIndex]"></app-slide>
     </div>
 </ng-container>

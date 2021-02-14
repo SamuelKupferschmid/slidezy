@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { environment } from 'src/environments/environment';
-import { Slide } from '../types';
+import { Coordinate, Slide } from '../types';
 
 @Component({
   selector: 'app-slide',
@@ -13,13 +12,18 @@ export class SlideComponent implements OnInit {
 
   @Input() slide: Slide;
 
-  constructor(private sanitizer: DomSanitizer) {
+  constructor() {
+
   }
 
   ngOnInit(): void {
   }
 
   getImageUrl(slide: Slide) {
-    return this.sanitizer.bypassSecurityTrustUrl(`${environment.storageUrl}/${slide.background}`);
+    return `${environment.storageUrl}/${slide.background}`;
+  }
+
+  getPolyLines(coordinates: Coordinate[]): string {
+    return coordinates.map(c => `${c.x},${c.y}`).join(' ');
   }
 }

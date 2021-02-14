@@ -2,7 +2,7 @@ import { Injectable, NgZone } from '@angular/core';
 import { HubConnectionBuilder, HubConnection } from '@microsoft/signalr'
 import { from, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Pencil } from '../types';
+import { Coordinate, Pencil } from '../types';
 @Injectable({
   providedIn: 'root'
 })
@@ -19,6 +19,9 @@ export class EventBusService {
 
     this.registerHandler('addSlide');
     this.registerHandler('selectSlide');
+    this.registerHandler('startPath');
+    this.registerHandler('continuePath');
+    this.registerHandler('completePath');
   }
 
   private registerHandler<T>(method: keyof EventBusService) {
@@ -48,6 +51,18 @@ export class EventBusService {
     this.emit(sessionId, 'selectSlide', event);
   }
 
+  startPath(sessionId: string, event: StartPathEvent) {
+    this.emit(sessionId, 'startPath', event);
+  }
+
+  continuePath(sessionId: string, event: ContinuePathEvent) {
+    this.emit(sessionId, 'continuePath', event);
+  }
+
+  completePath(sessionId: string, event: CompletePathEvent) {
+    this.emit(sessionId, 'completePath', event);
+  }
+
   async connect() {
     await this._connection.start();
   }
@@ -61,11 +76,6 @@ export class EventBusService {
   }
 }
 
-
-export interface StartPathEvent {
-  pencil: Pencil;
-}
-
 export interface AddSlideEvent {
   id: string;
   index: number;
@@ -74,6 +84,22 @@ export interface AddSlideEvent {
 
 export interface SelectSlideEvent {
   id: string;
+}
+
+export interface StartPathEvent {
+  id: string;
+  coordinate: Coordinate;
+  pencil: Pencil;
+}
+
+export interface ContinuePathEvent {
+  id: string;
+  coordinate: Coordinate,
+}
+
+export interface CompletePathEvent {
+  id: string;
+  coordinate: Coordinate;
 }
 
 export type NamedEvent<T> = T & {

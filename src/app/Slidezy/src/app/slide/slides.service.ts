@@ -3,7 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { distinctUntilChanged, filter, map, mergeMap } from 'rxjs/operators';
 import { ApiService } from '../api.service';
-import { AddSlideEvent, EventBusService, NamedEvent, SelectSlideEvent } from '../event-bus/event-bus.service';
+import { AddSlideEvent, CompletePathEvent, ContinuePathEvent, EventBusService, NamedEvent, SelectSlideEvent, StartPathEvent } from '../event-bus/event-bus.service';
 import { Slide } from '../types';
 
 @Injectable({
@@ -93,6 +93,15 @@ export class SlidesService {
       case 'selectSlide':
         this.handleSelectSlide(event as unknown as SelectSlideEvent);
         break;
+      case 'startPath':
+        this.handleStartPath(event as unknown as StartPathEvent);
+        break;
+      case 'continuePath':
+        this.handleContinuePath(event as unknown as ContinuePathEvent);
+        break;
+      case 'completePath':
+        this.handleCompletePath(event as unknown as CompletePathEvent);
+        break;
     };
   }
 
@@ -102,7 +111,7 @@ export class SlidesService {
       ...this._session$.value,
       slides: [
         ...slides.slice(0, event.index),
-        { ...event },
+        { ...event, paths: [] },
         ...slides.slice(event.index)
       ]
     });
@@ -113,6 +122,45 @@ export class SlidesService {
       ...this._session$.value,
       selectedSlideIndex: this._session$.value.slides.findIndex(slide => slide.id === event.id)
     });
+  }
+
+  private handleStartPath(event: StartPathEvent) {
+    this._session$.next({
+      ...this._session$.value,
+      slides: this._session$.value.slides.map(slide => {
+        if (slide.index === this._session$.value.selectedSlideIndex) {
+          return {
+            ...slide,
+            paths: [...slide.paths, {
+              ...event,
+              coordinates: [event.coordinate]
+            }]
+          }
+        } else {
+          return slide;
+        }
+      })
+    });
+  }
+
+  private handleContinuePath(event: ContinuePathEvent) {
+    const newSession = {
+      ...this._session$.value, slides: [...this._session$.value.slides]
+    };
+
+    const paths = newSession.slides[newSession.selectedSlideIndex].paths;
+    paths[paths.length - 1].coordinates.push(event.coordinate);
+
+    this._session$.next(newSession);
+  }
+
+  private handleCompletePath(event: CompletePathEvent) {
+    const newSession = { ...this._session$.value };
+
+    const paths = newSession.slides[newSession.selectedSlideIndex].paths;
+    paths[paths.length - 1].coordinates.push(event.coordinate);
+
+    this._session$.next(newSession);
   }
 
   createSession(): Observable<string> {
