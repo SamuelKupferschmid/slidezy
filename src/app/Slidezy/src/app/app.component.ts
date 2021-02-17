@@ -1,4 +1,6 @@
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core';
+import { MatDrawer, MatDrawerMode } from '@angular/material/sidenav';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { EventBusService } from './event-bus/event-bus.service';
@@ -19,6 +21,7 @@ export class AppComponent {
   opened = true;
 
   constructor(
+    private breakpoints: BreakpointObserver,
     private eventBus: EventBusService,
     slideService: SlidesService
   ) {
@@ -29,6 +32,16 @@ export class AppComponent {
 
   toggleMenu() {
     this.opened = !this.opened;
+  }
+
+  get drawerMode(): MatDrawerMode {
+    return this.breakpoints.isMatched('(max-width: 1280px)') ? 'over' : 'side';
+  }
+
+  drawerClick(drawer: MatDrawer) {
+    if (drawer.mode == 'over') {
+      drawer.close();
+    }
   }
 
   clearSlidePaths(session: Session) {
