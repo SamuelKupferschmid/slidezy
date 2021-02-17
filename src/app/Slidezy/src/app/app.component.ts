@@ -2,7 +2,8 @@ import { ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angu
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { EventBusService } from './event-bus/event-bus.service';
-import { Session, SlidesService } from './slide/slides.service';
+import { SlidesService } from './slide/slides.service';
+import { Session } from './types/session';
 
 @Component({
   selector: 'app-root',

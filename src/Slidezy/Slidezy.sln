@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Slidezy.Functions", "Slidez
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slidezy.Core", "Slidezy.Core\Slidezy.Core.csproj", "{5B91A0AD-9CFF-4618-9D32-201525B39CCB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slidezy.Typegenerator", "Slidezy.Typegenerator\Slidezy.Typegenerator.csproj", "{F4AABB44-5464-4DEA-A8F1-E45725B2C1FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{5B91A0AD-9CFF-4618-9D32-201525B39CCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B91A0AD-9CFF-4618-9D32-201525B39CCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B91A0AD-9CFF-4618-9D32-201525B39CCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4AABB44-5464-4DEA-A8F1-E45725B2C1FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4AABB44-5464-4DEA-A8F1-E45725B2C1FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4AABB44-5464-4DEA-A8F1-E45725B2C1FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4AABB44-5464-4DEA-A8F1-E45725B2C1FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

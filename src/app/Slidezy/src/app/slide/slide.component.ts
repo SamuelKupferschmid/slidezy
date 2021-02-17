@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { Coordinate, Slide } from '../types';
+import { Coordinate } from '../types/coordinate';
+import { Slide } from '../types/slide';
 
 @Component({
   selector: 'app-slide',

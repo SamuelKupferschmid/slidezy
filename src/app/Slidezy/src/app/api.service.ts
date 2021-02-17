@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Session } from './slide/slides.service';
-import { Path } from './types';
+import { Path } from './types/path';
+import { Session } from './types/session';
 
 @Injectable({
   providedIn: 'root'
