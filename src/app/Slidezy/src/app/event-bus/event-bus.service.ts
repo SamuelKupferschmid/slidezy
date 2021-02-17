@@ -2,7 +2,9 @@ import { Injectable, NgZone } from '@angular/core';
 import { HubConnectionBuilder, HubConnection } from '@microsoft/signalr'
 import { from, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Coordinate, Pencil } from '../types';
+import { Coordinate } from '../types/coordinate';
+import { Pencil } from '../types/pencil';
+
 @Injectable({
   providedIn: 'root'
 })

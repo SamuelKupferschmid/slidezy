@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Guid } from 'guid-typescript';
 import { EventBusService } from '../event-bus/event-bus.service';
-import { Session, SlidesService } from '../slide/slides.service';
-import { Coordinate } from '../types';
+import { SlidesService } from '../slide/slides.service';
+import { Session } from '../types/session';
+import { Coordinate } from '../types/coordinate';
+
 
 @Component({
   selector: 'app-canvas',

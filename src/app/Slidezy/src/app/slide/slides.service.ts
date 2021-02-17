@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { distinctUntilChanged, filter, map, mergeMap } from 'rxjs/operators';
 import { ApiService } from '../api.service';
 import { AddSlideEvent, ClearSlidePathsEvent, CompletePathEvent, ContinuePathEvent, EventBusService, NamedEvent, RemovePathEvent, SelectSlideEvent, StartPathEvent } from '../event-bus/event-bus.service';
-import { Slide } from '../types';
+import { Session } from '../types/session';
 
 @Injectable({
   providedIn: 'root'
@@ -243,10 +243,4 @@ export class SlidesService {
       map(session => session?.slides[session?.selectedSlideIndex])
     );
   }
-}
-
-export interface Session {
-  id: string;
-  slides: Slide[];
-  selectedSlideIndex: number;
 }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 
 using Slidezy.Core;
+using Slidezy.Core.Events;
 
 namespace Slidezy
 {
@@ -51,49 +52,6 @@ namespace Slidezy
         {
             await this.Clients.OthersInGroup(sessionId).SendAsync(nameof(RemovePath), @event);
         }
-    }
-
-    public class AddSlideEvent
-    {
-        public Guid Id { get; set; }
-        public int Index { get; set; }
-
-        public string Background { get; set; }
-    }
-
-    public class SelectSlideEvent
-    {
-        public Guid Id { get; set; }
-    }
-
-    public class StartPathEvent
-    {
-        public Guid Id { get; set; }
-        public Coordinate Coordinate { get; set; }
-        public Pencil Pencil { get; set; }
-    }
-
-    public class ContinuePathEvent
-    {
-        public Guid Id { get; set; }
-        public Coordinate Coordinate { get; set; }
-    }
-
-    public class CompletePathEvent
-    {
-        public Guid Id { get; set; }
-        public Coordinate Coordinate { get; set; }
-    }
-
-    public class ClearSlidePathsEvent
-    {
-        public Guid Id { get; set; }
-    }
-
-    public class RemovePathEvent
-    {
-        public Guid SlideId { get; set; }
-        public Guid PathId { get; set; }
     }
 }
 

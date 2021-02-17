@@ -2,7 +2,8 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Guid } from 'guid-typescript';
 import { Observable } from 'rxjs';
 import { EventBusService } from '../event-bus/event-bus.service';
-import { Session, SlidesService } from '../slide/slides.service';
+import { SlidesService } from '../slide/slides.service';
+import { Session } from '../types/session';
 
 @Component({
   selector: 'app-slide-list',
