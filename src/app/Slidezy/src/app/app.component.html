@@ -33,7 +33,8 @@
 
   </mat-toolbar>
   <mat-drawer-container autosize #matDrawer class="example-container">
-    <mat-drawer *ngIf="session.session" mode="side" [opened]="opened">
+    <mat-drawer *ngIf="session.session" #drawer (click)="drawerClick(drawer)" (openedChange)="opened = $event"
+      [mode]="drawerMode" [opened]="opened">
       <app-slide-list></app-slide-list>
     </mat-drawer>
     <mat-drawer-content>
