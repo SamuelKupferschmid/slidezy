@@ -1,0 +1,16 @@
+:host {
+    background-color: white;
+}
+.color-table {
+    display: flex;
+    flex-direction: row;
+}
+.color-cell {
+    margin: 4px;
+    width: 40px;
+    height: 40px;
+}
+
+.selected {
+    border: red 1px;
+}

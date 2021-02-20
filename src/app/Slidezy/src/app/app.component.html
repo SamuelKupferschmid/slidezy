@@ -8,6 +8,15 @@
     <h1 *ngIf="session.session" class="title-link">.app/{{session.session.id}}</h1>
     <div class="flex-1"></div>
     <div>
+      <button mat-raised-button [style.backgroundColor]="session.session.pencil.color"
+        (click)="colorPaletteOpen = !colorPaletteOpen" type="button" cdkOverlayOrigin #trigger="cdkOverlayOrigin">
+        Color
+      </button>
+      <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger"
+        [cdkConnectedOverlayOpen]="colorPaletteOpen">
+        <app-color-picker (colorChanged)="setColor(session.session.id, $event)"></app-color-picker>
+      </ng-template>
+
       <button [disabled]="session.session?.slides[session.session?.selectedSlideIndex].paths.length == 0"
         (click)="removeLastPath(session.session)" mat-icon-button>
         <mat-icon>undo</mat-icon>

@@ -9,6 +9,7 @@ import { CompletePathEvent } from '../types/events/complete-path-event';
 import { ContinuePathEvent } from '../types/events/continue-path-event';
 import { RemovePathEvent } from '../types/events/remove-path-event';
 import { SelectSlideEvent } from '../types/events/select-slide-event';
+import { SetPencilEvent } from '../types/events/set-pencil-event';
 import { StartPathEvent } from '../types/events/start-path-event';
 
 @Injectable({
@@ -39,6 +40,7 @@ export class EventBusService {
     this.registerHandler('completePath');
     this.registerHandler('clearSlidePaths');
     this.registerHandler('removePath');
+    this.registerHandler('setPencil');
   }
 
   private registerHandler<T>(method: keyof EventBusService) {
@@ -93,6 +95,10 @@ export class EventBusService {
 
   removePath(sessionId: string, event: RemovePathEvent) {
     this.emit(sessionId, 'removePath', event);
+  }
+
+  setPencil(sessionId: string, event: SetPencilEvent) {
+    this.emit(sessionId, 'setPencil', event);
   }
 
 

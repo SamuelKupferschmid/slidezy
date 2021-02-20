@@ -11,6 +11,7 @@ import { CompletePathEvent } from '../types/events/complete-path-event';
 import { ContinuePathEvent } from '../types/events/continue-path-event';
 import { RemovePathEvent } from '../types/events/remove-path-event';
 import { SelectSlideEvent } from '../types/events/select-slide-event';
+import { SetPencilEvent } from '../types/events/set-pencil-event';
 import { StartPathEvent } from '../types/events/start-path-event';
 import { Session } from '../types/session';
 
@@ -122,6 +123,9 @@ export class SlidesService {
       case 'removePath':
         this.handleRemovePath(event as unknown as NamedEvent<RemovePathEvent>);
         break;
+      case 'setPencil':
+        this.handleSetPencil(event as unknown as NamedEvent<SetPencilEvent>);
+        break;
     };
   }
 
@@ -157,6 +161,7 @@ export class SlidesService {
             ...slide,
             paths: [...slide.paths, {
               ...event,
+              pencil: { ...this._session$.value.pencil },
               points: this.appendCoordinate(event.coordinate)
             }]
           }
@@ -239,6 +244,19 @@ export class SlidesService {
 
     if (!event.remote) {
       this.api.removePath(session.id, event.slideId, event.pathId).subscribe();
+    }
+  }
+
+  private handleSetPencil(event: NamedEvent<SetPencilEvent>) {
+    const session = this._session$.value;
+
+    this._session$.next({
+      ...session,
+      pencil: event.pencil,
+    });
+
+    if (!event.remote) {
+      this.api.setPencil(session.id, event.pencil).subscribe();
     }
   }
 

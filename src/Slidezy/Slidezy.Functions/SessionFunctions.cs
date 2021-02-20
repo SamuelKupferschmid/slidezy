@@ -116,5 +116,25 @@ namespace Slidezy.Functions
             slide.Paths = slide.Paths.Where(path => path.Id != pathId);
             result = session;
         }
+
+        [FunctionName(nameof(SetPencil))]
+        public static void SetPencil(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "sessions/{sessionId}/pencil")] Pencil pencil, string sessionId,
+            [CosmosDB(
+                databaseName: "slidezy-db",
+                collectionName: "sessions",
+                ConnectionStringSetting = "CosmosDBConnection",
+                Id = "{sessionId}",
+                PartitionKey = "{sessionId}")] Session session,
+            [CosmosDB(
+                databaseName: "slidezy-db",
+                collectionName: "sessions",
+                ConnectionStringSetting = "CosmosDBConnection",
+                PartitionKey = "{sessionId}")] out Session result,
+            ILogger log)
+        {
+            session.Pencil = pencil;
+            result = session;
+        }
     }
 }

@@ -1,0 +1,7 @@
+<div class="color-table">
+    <div *ngFor="let hue of hues" class="hue-column">
+        <div *ngFor="let lightness of lightness" (click)="selectColor(hue, 80, lightness)"
+            [ngClass]="{'mat-elevation-z4': hue === color?.hue && lightness == color?.lightnessPercentage}"
+            [style.backgroundColor]="getHsl(hue, 80, lightness)" class="color-cell"></div>
+    </div>
+</div>

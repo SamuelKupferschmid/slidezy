@@ -9,5 +9,10 @@ namespace Slidezy.Core.Events
 
         public string Background { get; set; }
     }
+
+    public class SetPencilEvent
+    {
+        public Pencil Pencil { get; set; }
+    }
 }
 

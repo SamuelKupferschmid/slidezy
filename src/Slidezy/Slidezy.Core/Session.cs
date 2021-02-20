@@ -10,5 +10,7 @@ namespace Slidezy.Core
         public string Id { get; set; }
         public int? SelectedSlideIndex { get; set; }
         public IEnumerable<Slide> Slides { get; set; }
+
+        public Pencil Pencil { get; set; }
     }
 }

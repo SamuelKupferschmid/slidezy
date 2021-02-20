@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angu
 import { MatDrawer, MatDrawerMode } from '@angular/material/sidenav';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { HslColor } from './color-picker/color-picker.component';
 import { EventBusService } from './event-bus/event-bus.service';
 import { SlidesService } from './slide/slides.service';
 import { Session } from './types/session';
@@ -20,6 +21,8 @@ export class AppComponent {
   session$: Observable<{ session: Session }>;
   opened = true;
 
+  colorPaletteOpen: boolean;
+
   constructor(
     private breakpoints: BreakpointObserver,
     private eventBus: EventBusService,
@@ -28,6 +31,17 @@ export class AppComponent {
     this.session$ = slideService.session$.pipe(
       map(session => ({ session }))
     );
+  }
+
+  setColor(sessionId: string, color: HslColor) {
+    this.eventBus.setPencil(sessionId, {
+      pencil: {
+        width: 12,
+        color: `hsla(${color.hue}, ${color.saturationPercentage}%, ${color.lightnessPercentage}%, 0.7)`
+      }
+    })
+    this.colorPaletteOpen = false;
+
   }
 
   toggleMenu() {
