@@ -137,11 +137,15 @@ export class SlidesService {
     });
   }
 
-  private handleSelectSlide(event: SelectSlideEvent) {
+  private handleSelectSlide(event: NamedEvent<SelectSlideEvent>) {
     this._session$.next({
       ...this._session$.value,
       selectedSlideIndex: this._session$.value.slides.findIndex(slide => slide.id === event.id)
     });
+
+    if (!event.remote) {
+      this.api.selectedSlide(this._session$.value.id, { id: event.id }).subscribe();
+    }
   }
 
   private handleStartPath(event: StartPathEvent) {

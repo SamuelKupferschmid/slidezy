@@ -53,6 +53,28 @@ namespace Slidezy.Functions
             result = session;
         }
 
+        [FunctionName(nameof(SelectedSlide))]
+        public static void SelectedSlide(
+    [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "sessions/{sessionId}/selected-slide")] SlideSelection selection, string sessionId,
+    [CosmosDB(
+                databaseName: "slidezy-db",
+                collectionName: "sessions",
+                ConnectionStringSetting = "CosmosDBConnection",
+                Id = "{sessionId}",
+                PartitionKey = "{sessionId}")] Session session,
+    [CosmosDB(
+                databaseName: "slidezy-db",
+                collectionName: "sessions",
+                ConnectionStringSetting = "CosmosDBConnection",
+                PartitionKey = "{sessionId}")] out Session result,
+    ILogger log)
+        {
+            var index = session.Slides.ToList().FindIndex(slide => slide.Id == selection.Id);
+            session.SelectedSlideIndex = index;
+
+            result = session;
+        }
+
         [FunctionName(nameof(ClearSlidePaths))]
         public static void ClearSlidePaths(
             [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "sessions/{sessionId}/slides/{slideId}/paths")] HttpRequest req, string sessionId, Guid slideId,

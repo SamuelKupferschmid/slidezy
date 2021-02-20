@@ -9,4 +9,9 @@ namespace Slidezy.Core
         public Pencil Pencil { get; set; }
         public string Points { get; set; }
     }
+
+    public class SlideSelection
+    {
+        public Guid Id { get; set; }
+    }
 }
