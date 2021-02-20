@@ -7,6 +7,7 @@ export const environment = {
   functionsApi: 'http://localhost:7071/api',
   eventHub: 'https://localhost:44338/sessions',
   storageUrl: 'https://storageslidezy.blob.core.windows.net/sessions',
+  canvasRatio: 16 / 9,
 };
 
 /*
