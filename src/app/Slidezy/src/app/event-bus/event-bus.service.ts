@@ -2,8 +2,13 @@ import { Injectable, NgZone } from '@angular/core';
 import { HubConnectionBuilder, HubConnection } from '@microsoft/signalr'
 import { from, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Coordinate } from '../types/coordinate';
-import { Pencil } from '../types/pencil';
+import { AddSlideEvent } from '../types/events/add-slide-event';
+import { ClearSlidePathsEvent } from '../types/events/clear-slide-paths-event';
+import { CompletePathEvent } from '../types/events/complete-path-event';
+import { ContinuePathEvent } from '../types/events/continue-path-event';
+import { RemovePathEvent } from '../types/events/remove-path-event';
+import { SelectSlideEvent } from '../types/events/select-slide-event';
+import { StartPathEvent } from '../types/events/start-path-event';
 
 @Injectable({
   providedIn: 'root'
@@ -91,41 +96,6 @@ export class EventBusService {
   leaveSession(sessionId: string) {
     return from(this._connection.invoke('LeaveSession', sessionId));
   }
-}
-
-export interface AddSlideEvent {
-  id: string;
-  index: number;
-  background: string;
-}
-
-export interface SelectSlideEvent {
-  id: string;
-}
-
-export interface StartPathEvent {
-  id: string;
-  coordinate: Coordinate;
-  pencil: Pencil;
-}
-
-export interface ContinuePathEvent {
-  id: string;
-  coordinate: Coordinate,
-}
-
-export interface CompletePathEvent {
-  id: string;
-  coordinate: Coordinate;
-}
-
-export interface ClearSlidePathsEvent {
-  id: string;
-}
-
-export interface RemovePathEvent {
-  slideId: string;
-  pathId: string;
 }
 
 export type NamedEvent<T> = T & {

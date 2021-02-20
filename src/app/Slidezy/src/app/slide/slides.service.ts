@@ -3,7 +3,14 @@ import { NavigationEnd, Router } from '@angular/router';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { distinctUntilChanged, filter, map, mergeMap } from 'rxjs/operators';
 import { ApiService } from '../api.service';
-import { AddSlideEvent, ClearSlidePathsEvent, CompletePathEvent, ContinuePathEvent, EventBusService, NamedEvent, RemovePathEvent, SelectSlideEvent, StartPathEvent } from '../event-bus/event-bus.service';
+import { EventBusService, NamedEvent } from '../event-bus/event-bus.service';
+import { AddSlideEvent } from '../types/events/add-slide-event';
+import { ClearSlidePathsEvent } from '../types/events/clear-slide-paths-event';
+import { CompletePathEvent } from '../types/events/complete-path-event';
+import { ContinuePathEvent } from '../types/events/continue-path-event';
+import { RemovePathEvent } from '../types/events/remove-path-event';
+import { SelectSlideEvent } from '../types/events/select-slide-event';
+import { StartPathEvent } from '../types/events/start-path-event';
 import { Session } from '../types/session';
 
 @Injectable({
