@@ -1,5 +1,5 @@
 <ng-container *ngIf="session$ | async as session">
-    <div id="canvas" class="mat-elevation-z8" style="--aspect-ratio:16/9;">
+    <div id="canvas" [ngStyle]="{margin: margin}" class="mat-elevation-z4" style="--aspect-ratio:16/9;">
         <app-slide (touchstart)="touchstart(session, $event)" (touchmove)="touchmove(session, $event)"
             (touchend)="touchend(session, $event)" (mousedown)="mousedown(session, $event)"
             (mousemove)="mousemove(session, $event)" (mouseup)="mouseup(session, $event)"

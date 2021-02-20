@@ -3,4 +3,5 @@ export const environment = {
   functionsApi: 'https://func-slidezy-prod.azurewebsites.net/api',
   eventHub: 'https://app-slidezy-prod.azurewebsites.net/sessions',
   storageUrl: 'https://storageslidezy.blob.core.windows.net/sessions',
+  canvasRatio: 16 / 9,
 };

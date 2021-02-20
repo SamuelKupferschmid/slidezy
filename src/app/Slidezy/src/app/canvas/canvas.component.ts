@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ContentChild, ElementRef, NgZone, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Guid } from 'guid-typescript';
 import { EventBusService } from '../event-bus/event-bus.service';
 import { SlidesService } from '../slide/slides.service';
 import { Session } from '../types/session';
 import { Coordinate } from '../types/coordinate';
-
+import ResizeObserver from 'resize-observer-polyfill';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-canvas',
@@ -18,14 +19,34 @@ export class CanvasComponent implements OnInit {
 
   private currentPathId: string;
 
+  @ContentChild('.canvas') canvas: ElementRef<HTMLDivElement>;
+
+  margin: string;
+
   constructor(
     private eventBus: EventBusService,
+    private host: ElementRef,
+    private changeDetector: ChangeDetectorRef,
+    private zone: NgZone,
     slides: SlidesService
   ) {
     this.session$ = slides.session$;
   }
 
   ngOnInit(): void {
+    new ResizeObserver((entries: ResizeObserverEntry[]) => this.zone.run(() => {
+      const contentRect = entries[0].contentRect;
+
+      const expectedWidth = contentRect.height * environment.canvasRatio;
+
+      let compensation = (contentRect.width - expectedWidth) / 2;
+      if (compensation < 0) {
+        compensation = 0;
+      }
+
+      this.margin = `0 ${compensation}px`;
+      this.changeDetector.markForCheck();
+    })).observe(this.host.nativeElement);
   }
 
   touchstart(session: Session, ev: TouchEvent) {
