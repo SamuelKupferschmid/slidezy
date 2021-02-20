@@ -7,6 +7,6 @@ namespace Slidezy.Core
     {
         public Guid Id { get; set; }
         public Pencil Pencil { get; set; }
-        public IEnumerable<Coordinate> Coordinates { get; set; }
+        public string Points { get; set; }
     }
 }

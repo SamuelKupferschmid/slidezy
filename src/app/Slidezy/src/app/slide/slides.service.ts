@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { distinctUntilChanged, filter, map, mergeMap, switchMap } from 'rxjs/operators';
 import { ApiService } from '../api.service';
 import { EventBusService, NamedEvent } from '../event-bus/event-bus.service';
+import { Coordinate } from '../types/coordinate';
 import { AddSlideEvent } from '../types/events/add-slide-event';
 import { ClearSlidePathsEvent } from '../types/events/clear-slide-paths-event';
 import { CompletePathEvent } from '../types/events/complete-path-event';
@@ -152,7 +153,7 @@ export class SlidesService {
             ...slide,
             paths: [...slide.paths, {
               ...event,
-              coordinates: [event.coordinate]
+              points: this.appendCoordinate(event.coordinate)
             }]
           }
         } else {
@@ -169,7 +170,7 @@ export class SlidesService {
     const path = paths[paths.length - 1];
     paths[paths.length - 1] = {
       ...path,
-      coordinates: [...path.coordinates, event.coordinate]
+      points: this.appendCoordinate(event.coordinate, path.points)
     };
 
     newSession.slides[newSession.selectedSlideIndex] = {
@@ -183,7 +184,8 @@ export class SlidesService {
     const newSession = { ...this._session$.value };
 
     const paths = newSession.slides[newSession.selectedSlideIndex].paths;
-    paths[paths.length - 1].coordinates.push(event.coordinate);
+    const path = paths[paths.length - 1];
+    path.points = this.appendCoordinate(event.coordinate, path.points);
 
     this._session$.next(newSession);
 
@@ -255,5 +257,9 @@ export class SlidesService {
     return this._session$.pipe(
       map(session => session?.slides[session?.selectedSlideIndex])
     );
+  }
+
+  private appendCoordinate(coord: Coordinate, pointsPrefix = '') {
+    return `${pointsPrefix} ${coord.x.toFixed(2)},${coord.y.toFixed(2)}`;
   }
 }
