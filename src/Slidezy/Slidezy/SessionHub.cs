@@ -52,6 +52,11 @@ namespace Slidezy
         {
             await this.Clients.OthersInGroup(sessionId).SendAsync(nameof(RemovePath), @event);
         }
+
+        public async Task SetPencil(string sessionId, SetPencilEvent @event)
+        {
+            await this.Clients.OthersInGroup(sessionId).SendAsync(nameof(SetPencil), @event);
+        }
     }
 }
 
