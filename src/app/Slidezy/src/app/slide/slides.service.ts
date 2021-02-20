@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { distinctUntilChanged, filter, map, mergeMap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, mergeMap, switchMap } from 'rxjs/operators';
 import { ApiService } from '../api.service';
 import { EventBusService, NamedEvent } from '../event-bus/event-bus.service';
 import { AddSlideEvent } from '../types/events/add-slide-event';
@@ -22,7 +22,7 @@ export class SlidesService {
 
   constructor(
     private router: Router,
-    eventBus: EventBusService,
+    private eventBus: EventBusService,
     private api: ApiService,
   ) {
     const params$ = router.events.pipe(
@@ -52,12 +52,18 @@ export class SlidesService {
 
     sessionId$.pipe(
       filter(id => !!id),
-      mergeMap(id => api.getSession(id)),
-      mergeMap(session => eventBus.joinSession(session.id).pipe(
+      switchMap(id => api.getSession(id)),
+      switchMap(session => eventBus.joinSession(session.id).pipe(
         map(() => session))
       )
     ).subscribe(session => {
       this._session$.next(session);
+    });
+
+    this.eventBus.reconnected$.pipe(
+      switchMap(_ => api.getSession(this._session$.value.id)),
+    ).subscribe(session => {
+      this._session$.next(session)
     });
 
     params$.pipe(

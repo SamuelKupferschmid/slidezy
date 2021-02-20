@@ -1,6 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
-import { HubConnectionBuilder, HubConnection } from '@microsoft/signalr'
-import { from, Subject } from 'rxjs';
+import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
+import { from, Observable, Subject } from 'rxjs';
+import { shareReplay } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AddSlideEvent } from '../types/events/add-slide-event';
 import { ClearSlidePathsEvent } from '../types/events/clear-slide-paths-event';
@@ -17,12 +18,19 @@ export class EventBusService {
   private _connection: HubConnection;
   private _events$ = new Subject<NamedEvent<any>>();
   private _zone = new NgZone({ enableLongStackTrace: false });
+  private _reconnected$: Observable<void>;
 
   constructor() {
     this._connection = new HubConnectionBuilder()
       .withUrl(environment.eventHub)
       .withAutomaticReconnect()
       .build();
+
+    this._reconnected$ = new Observable<void>(observer => this._connection.onreconnected(() => {
+      this._zone.run(() => observer.next());
+    })).pipe(
+      shareReplay(1)
+    );
 
     this.registerHandler('addSlide');
     this.registerHandler('selectSlide');
@@ -39,6 +47,10 @@ export class EventBusService {
       remote: true,
       ...event
     })));
+  }
+
+  get reconnected$() {
+    return this._reconnected$;
   }
 
   get events$() {
