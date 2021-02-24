@@ -8,7 +8,7 @@
     <h1 *ngIf="session.session" class="title-link">.app/{{session.session.id}}</h1>
     <div class="flex-1"></div>
     <div>
-      <button mat-raised-button [style.backgroundColor]="session.session.pencil.color"
+      <button mat-raised-button [style.backgroundColor]="session.session?.pencil.color"
         (click)="colorPaletteOpen = !colorPaletteOpen" type="button" cdkOverlayOrigin #trigger="cdkOverlayOrigin">
         Color
       </button>
