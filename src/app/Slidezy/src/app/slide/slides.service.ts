@@ -1,7 +1,8 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { distinctUntilChanged, filter, map, mergeMap, switchMap } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { catchError, distinctUntilChanged, filter, map, mergeMap, switchMap } from 'rxjs/operators';
 import { ApiService } from '../api.service';
 import { EventBusService, NamedEvent } from '../event-bus/event-bus.service';
 import { Coordinate } from '../types/coordinate';
@@ -267,8 +268,16 @@ export class SlidesService {
     for (let i = length; i > 0; --i) {
       result += chars[Math.floor(Math.random() * chars.length)];
     }
-
-    return of(result);
+    return this.api.putSession(result).pipe(
+      map(session => session.id),
+      catchError((err, _) => {
+        if (err instanceof HttpErrorResponse && err.status === 409) {
+          return this.createSession();
+        } else {
+          throw err;
+        }
+      }),
+    )
   }
 
   get session$() {

@@ -17,11 +17,11 @@
         <app-color-picker (colorChanged)="setColor(session.session.id, $event)"></app-color-picker>
       </ng-template>
 
-      <button [disabled]="session.session?.slides[session.session?.selectedSlideIndex].paths.length == 0"
+      <button [disabled]="session.session?.slides[session.session?.selectedSlideIndex]?.paths?.length == 0"
         (click)="removeLastPath(session.session)" mat-icon-button>
         <mat-icon>undo</mat-icon>
       </button>
-      <button [disabled]="session.session?.slides[session.session?.selectedSlideIndex].paths.length == 0"
+      <button [disabled]="session.session?.slides[session.session?.selectedSlideIndex]?.paths?.length == 0"
         (click)="clearSlidePaths(session.session)" mat-icon-button>
         <mat-icon>backspace</mat-icon>
       </button>
