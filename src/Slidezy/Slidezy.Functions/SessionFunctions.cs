@@ -31,6 +31,52 @@ namespace Slidezy.Functions
             return new OkObjectResult(session);
         }
 
+        [FunctionName(nameof(PostRandomSession))]
+        public static IActionResult PostRandomSession(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "sessions/{sessionId}")] Core.Path path, string sessionId,
+            [CosmosDB(
+                databaseName: "slidezy-db",
+                collectionName: "sessions",
+                ConnectionStringSetting = "CosmosDBConnection",
+                Id = "{sessionId}",
+                PartitionKey = "{sessionId}")] Session existingSession,
+            [CosmosDB(
+                databaseName: "slidezy-db",
+                collectionName: "sessions",
+                ConnectionStringSetting = "CosmosDBConnection",
+                PartitionKey = "{sessionId}")] out Session result,
+            ILogger log)
+        {
+            if (existingSession != null)
+            {
+                result = null;
+                return new ConflictResult();
+            }
+            else
+            {
+                result = new Session
+                {
+                    Id = sessionId,
+                    Pencil = new Pencil
+                    {
+                        Color = "hsla(180, 80%, 33.33333333333333%, 0.7)",
+                        Width = 12
+                    },
+                    Slides = new Slide[] { new Slide {
+                        Id = Guid.NewGuid(),
+                        Index = 0,
+                        Paths = new Core.Path[] { }
+                    }
+                    },
+                    SelectedSlideIndex = 0,
+                    Ttl = -1
+                };
+                return new CreatedResult($"/api/sessions/{sessionId}", result);
+            }
+
+
+        }
+
         [FunctionName(nameof(AddPath))]
         public static void AddPath(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "sessions/{sessionId}/slides/{slideId}")] Core.Path path, string sessionId, Guid slideId,
@@ -136,5 +182,7 @@ namespace Slidezy.Functions
             session.Pencil = pencil;
             result = session;
         }
+
+
     }
 }

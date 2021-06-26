@@ -19,6 +19,10 @@ export class ApiService {
     return this.httpClient.get<Session>(`sessions/${id}`);
   }
 
+  putSession(id: string) {
+    return this.httpClient.put<Session>(`sessions/${id}`, null);
+  }
+
   addPath(sessionId: string, slideId: string, path: Path) {
     return this.httpClient.post<void>(`sessions/${sessionId}/slides/${slideId}`, path);
   }

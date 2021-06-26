@@ -12,5 +12,8 @@ namespace Slidezy.Core
         public IEnumerable<Slide> Slides { get; set; }
 
         public Pencil Pencil { get; set; }
+
+        [JsonProperty("ttl")]
+        public int Ttl { get; set; }
     }
 }
