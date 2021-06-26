@@ -73,11 +73,13 @@ export class AppComponent {
     });
   }
 
-  enterFullscreen(mode: FullscreenMode) {
+  async enterFullscreen(mode: FullscreenMode) {
     this.opened = false;
     const element = mode === 'app' ? this.appRef.nativeElement : document.querySelector('#canvas');
-    element.requestFullscreen();
 
+    const existingFunction =
+      ['requestFullscreen', 'webkitRequestFullscreen', 'mozRequestFullScreen', 'msRequestFullscreen'].find(func => element[func]);
+    await element[existingFunction]();
   }
 }
 

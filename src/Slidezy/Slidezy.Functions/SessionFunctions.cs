@@ -59,16 +59,17 @@ namespace Slidezy.Functions
                     Id = sessionId,
                     Pencil = new Pencil
                     {
-                        Color = "#000",
+                        Color = "hsla(180, 80%, 33.33333333333333%, 0.7)",
                         Width = 12
                     },
                     Slides = new Slide[] { new Slide {
                         Id = Guid.NewGuid(),
                         Index = 0,
-                        Paths = new Core.Path[]{ }
-                    } 
+                        Paths = new Core.Path[] { }
+                    }
                     },
-                    SelectedSlideIndex = 0
+                    SelectedSlideIndex = 0,
+                    Ttl = -1
                 };
                 return new CreatedResult($"/api/sessions/{sessionId}", result);
             }
